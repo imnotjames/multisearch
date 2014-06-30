@@ -1,0 +1,28 @@
+{
+	"name": "multisearch",
+	"description": "Search for Bower packages",
+	"license": "MIT",
+	"keywords": [],
+	"author": "James Ward <james@notjam.es>",
+	"repository": "bower/search",
+	"engines": {
+		"node": ">=0.10.0"
+	},
+	"devDependencies": {
+		"load-grunt-tasks": "^0.4.0",
+
+		"grunt": "^0.4.2",
+
+		"grunt-autoprefixer": "^0.7.1",
+		"grunt-browserify": "^2.0.8",
+
+		"grunt-contrib-jshint": "^0.10.0",
+		"grunt-contrib-less": "^0.11.0",
+
+		"grunt-contrib-watch": "^0.6.1",
+		"grunt-contrib-connect": "^0.7.0"
+
+	},
+	"private": true
+}
+

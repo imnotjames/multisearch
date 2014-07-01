@@ -10,9 +10,17 @@ module.exports = function (grunt) {
 					{
 						expand: true,
 						cwd: 'bower_components/bootstrap/fonts/',
-						src: [ '**' ],
-						dest: 'src/dist/fonts/',
+						src: '**',
+						dest: 'dist/assets/fonts/',
 						filter: 'isFile'
+					},
+					{
+						src: 'src/index.html',
+						dest: 'dist/index.html'
+					},
+					{
+						src: 'src/crossdomainrequest.user.js',
+						dest: 'dist/crossdomainrequest.user.js'
 					}
 				]
 			}
@@ -28,7 +36,7 @@ module.exports = function (grunt) {
 				},
 
 				files: {
-					'src/dist/app.css': 'src/css/app.less'
+					'dist/assets/css/app.css': 'src/css/app.less'
 				}
 			}
 		},
@@ -43,7 +51,7 @@ module.exports = function (grunt) {
 		browserify: {
 			app: {
 				files: {
-					'src/dist/app.js': [
+					'dist/assets/js/app.js': [
 						'src/js/index.js'
 					]
 				}
@@ -54,7 +62,7 @@ module.exports = function (grunt) {
 			app: {
 				options: {
 					port: 9001,
-					base: 'src/'
+					base: 'dist/'
 				}
 			}
 		},
@@ -62,8 +70,7 @@ module.exports = function (grunt) {
 		watch: {
 			app: {
 				files: [
-					'src/css/*.less',
-					'src/js/**/*.js'
+					'**'
 				],
 				tasks: [ 'default' ]
 			}

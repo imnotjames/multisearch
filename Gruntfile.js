@@ -26,6 +26,21 @@ module.exports = function (grunt) {
 			}
 		},
 
+		autoprefixer: {
+			app: {
+				src: 'dist/assets/css/app.css',
+				dest: 'dist/assets/css/app.css'
+			}
+		},
+
+		cssmin: {
+			app: {
+				files: {
+					'dist/assets/css/app.css': [ 'dist/assets/css/app.css' ]
+				}
+			}
+		},
+
 		less: {
 			app: {
 				options: {
@@ -84,8 +99,10 @@ module.exports = function (grunt) {
 			'browserify:app',
 
 			'copy:app',
+
 			'less:app',
-			// 'autoprefixer:app',
+			'autoprefixer:app',
+			'cssmin:app'
 		]
 	);
 

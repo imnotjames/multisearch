@@ -4,6 +4,20 @@ module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
 
 	grunt.initConfig({
+		copy: {
+			app: {
+				files: [
+					{
+						expand: true,
+						cwd: 'bower_components/bootstrap/fonts/',
+						src: [ '**' ],
+						dest: 'src/dist/fonts/',
+						filter: 'isFile'
+					}
+				]
+			}
+		},
+
 		less: {
 			app: {
 				options: {
@@ -61,6 +75,8 @@ module.exports = function (grunt) {
 		[
 			'jshint:app',
 			'browserify:app',
+
+			'copy:app',
 			'less:app',
 			// 'autoprefixer:app',
 		]

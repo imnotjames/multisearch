@@ -27,7 +27,6 @@
 
 		var cdrEvent = document.createEvent('CustomEvent');
 		cdrEvent.initCustomEvent('cross-domain-request-message', true, true, data);
-		console.log('dispatching');
 
 		unsafeWindow.dispatchEvent(cdrEvent);
 	};

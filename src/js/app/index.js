@@ -3,6 +3,7 @@
 
 	var SearchManager = require('./models/SearchManager');
 	var SearchManagerView = require('./views/SearchManagerView');
+	var SlideMenuView = require('./views/SlideMenuView');
 	var RequestManager = require('./RequestManager');
 
 	var manager = new SearchManager();
@@ -38,9 +39,30 @@
 		var searchInput = document.getElementById('search');
 		var searchResultsDiv = document.getElementById('search-results');
 
+		var slideMenuToggleButton = document.getElementById('slide-menu-toggle');
+
+		var slideMenuView = new SlideMenuView({
+			model: manager,
+			element: document.getElementById('slide-menu'),
+			container: document.body
+		})
+
 		searchResultsDiv.appendChild(managerView.getElement());
+		window.document.body.appendChild(slideMenuView.getElement())
 
 		managerView.render();
+		slideMenuView.render();
+
+		slideMenuToggleButton.addEventListener(
+			'click',
+			function (event) {
+				event.preventDefault();
+
+				slideMenuView.toggle();
+
+				document.getElementById('icon-bars').classList.toggle('icon-bars-back');
+			}
+		);
 
 		searchInput.addEventListener(
 			'change',

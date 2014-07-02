@@ -1,0 +1,28 @@
+.icon-bars {
+	.icon-bar, .icon-bar:first-child, .icon-bar:last-child {
+		transform: rotate(0deg) translate(1, 1);
+
+		display: block;
+
+		width: 22px;
+		height: 2px;
+		border-radius: 1px;
+		background-color: @navbar-default-toggle-icon-bar-bg;
+
+		& + .icon-bar {
+			margin-top: 4px;
+		}
+	}
+}
+
+.icon-bars.icon-bars-back {
+	.icon-bar:first-child {
+		width: 10px;
+		transform: rotate(-45deg) translate(-1px, 1px);
+	}
+
+	.icon-bar:last-child {
+		width: 10px;
+		transform: rotate(45deg) translate(-1px, -1px);
+	}
+}

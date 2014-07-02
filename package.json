@@ -1,10 +1,10 @@
 {
 	"name": "multisearch",
-	"description": "Search for Bower packages",
+	"description": "Search multiple sites at once",
 	"license": "MIT",
 	"keywords": [],
 	"author": "James Ward <james@notjam.es>",
-	"repository": "bower/search",
+	"repository": "imnotjames/multisearch",
 	"engines": {
 		"node": ">=0.10.0"
 	},

@@ -69,6 +69,14 @@ module.exports = function (grunt) {
 					'dist/assets/js/app.js': [
 						'src/js/index.js'
 					]
+				},
+				options: {
+					browserifyOptions: {
+						paths: [
+							'src/js',
+							'bower_components/jquery/dist'
+						]
+					}
 				}
 			}
 		},

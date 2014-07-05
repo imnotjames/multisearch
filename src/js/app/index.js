@@ -30,7 +30,8 @@
 			eventName: 'cross-domain-request-message'
 		});
 
-		manager.setURLFetcher(
+		manager.set(
+			'fetcher',
 			function (url, callback) {
 				requestManager.request(url, callback);
 			}
@@ -67,14 +68,14 @@
 		searchInput.addEventListener(
 			'change',
 			function() {
-				manager.setSearchTerm(searchInput.value);
+				manager.set('term', searchInput.value);
 
 				manager.execute();
 			}
 		);
 
 		if (searchInput.value) {
-			manager.setSearchTerm(searchInput.value);
+			manager.set('term', searchInput.value);
 
 			manager.execute();
 		}

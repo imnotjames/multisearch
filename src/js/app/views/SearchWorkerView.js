@@ -17,10 +17,10 @@ module.exports = (function() {
 				model: _model
 			});
 
-			_model.addCallback(
-				'change-state',
-				this,
-				this._onChangeState
+			_model.bind(
+				'change:state',
+				this._onChangeState,
+				this
 			);
 		};
 
@@ -47,7 +47,7 @@ module.exports = (function() {
 			iconContainerElement.classList.add('text-center');
 			iconContainerElement.appendChild(_iconView.render().getElement());
 
-			var labelText = '' + this.getModel().getName() +' - ' + this.getModel().getState();
+			var labelText = '' + this.getModel().get('name') +' - ' + this.getModel().get('state');
 
 			var searchURL = this.getModel().getSearchURL();
 

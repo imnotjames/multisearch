@@ -20,10 +20,10 @@ module.exports = (function() {
 
 			_element = document.createElement('div');
 
-			_model.addCallback(
-				'change-state',
-				this,
-				this._onChangeState
+			_model.bind(
+				'change:state',
+				this._onChangeState,
+				this
 			);
 		};
 
@@ -43,7 +43,7 @@ module.exports = (function() {
 			var element = this.getElement();
 			element.innerHTML = '';
 
-			var state = this.getModel().getState();
+			var state = this.getModel().get('state');
 
 			var stateText = _prettyNameMap[state] || "Unknown State";
 

@@ -1,64 +1,56 @@
-module.exports = (function() {
-	'use strict';
+var Model = require('app/Model');
+var SearchWorker = require('app/models/SearchWorker');
 
-	var SearchWorker = require('./SearchWorker');
+module.exports = Model.extend({
+	initialize: function(options) {
+		options = options || {};
 
-	var SearchManager = function(options) {
-		var _workers = [];
+		this.bind(
+			'change:fetcher',
+			function(model, value) {
+				var workers = this.getWorkers();
 
-		var _term;
-
-		var _urlFetcher;
-
-		this.initialize = function(options) {
-			_urlFetcher = options.urlFetcher || null;
-			_term = options.term || "";
-
-			_workers.push(
-				new SearchWorker({
-					name: 'Multisearch github search',
-					failureText: '(We couldn&#39;t find any code matching|We could not perform)',
-					urlFetcher: _urlFetcher,
-					searchURL: 'https://github.com/imnotjames/multisearch/search?q=[query]'
-				})
-			);
-
-			_workers.push(
-				new SearchWorker({
-					name: 'Global github search',
-					failureText: '(We couldn&#39;t find any code matching|Search more than)',
-					urlFetcher: _urlFetcher,
-					searchURL: 'https://github.com/search?q=[query]'
-				})
-			);
-		};
-
-		this.getWorkers = function() {
-			return _workers;
-		};
-
-		this.setURLFetcher = function(fetcher) {
-			_urlFetcher = fetcher;
-
-			for (var i = 0; i < _workers.length; i++) {
-				_workers[i].setURLFetcher(fetcher);
+				for (var i = 0; i < workers.length; i++) {
+					workers[i].set('fetcher', value);
+				}
 			}
-		},
+		);
 
-		this.setSearchTerm = function(term) {
-			_term = term;
-		};
+		var workers = [];
 
-		this.execute = function() {
-			for (var i = 0; i < _workers.length; i++) {
-				_workers[i].setSearchTerm(_term);
+		workers.push(
+			new SearchWorker({
+				name: 'Multisearch github search',
+				failureText: '(We couldn&#39;t find any code matching|We could not perform)',
+				urlFetcher: options.fetcher,
+				url: 'https://github.com/imnotjames/multisearch/search?q=[query]'
+			})
+		);
 
-				_workers[i].execute();
-			}
-		};
+		workers.push(
+			new SearchWorker({
+				name: 'Global github search',
+				failureText: '(We couldn&#39;t find any code matching|Search more than)',
+				urlFetcher: options.fetcher,
+				url: 'https://github.com/search?q=[query]'
+			})
+		);
 
-		this.initialize.call(this, options || {});
-	};
+		this.set('workers', workers);
+	},
 
-	return SearchManager;
-})();
+	getWorkers: function() {
+		return this.get('workers');
+	},
+
+	execute: function() {
+		var term = this.get('term');
+		var workers = this.get('workers');
+
+		for (var i = 0; i < workers.length; i++) {
+			workers[i].set('term', term);
+
+			workers[i].execute();
+		}
+	}
+});

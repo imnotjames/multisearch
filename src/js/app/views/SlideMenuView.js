@@ -50,7 +50,7 @@ module.exports = (function() {
 				var workerListAnchor = document.createElement('a');
 				var workerListRemoveButton = document.createElement('button');
 
-				workerListAnchor.innerHTML = workers[i].getName();
+				workerListAnchor.innerHTML = workers[i].get('name');
 				workerListAnchor.href = '#';
 
 				workerListRemoveButton.title = 'Remove this Site';

@@ -1,7 +1,24 @@
-module.exports = (function() {
-	var SearchWorker = require('../models/SearchWorker');
+var View = require('app/View');
+var SearchWorker = require('app/models/SearchWorker');
 
-	var SearchWorkerIconView = function(options) {
+module.exports = View.extend({
+	initialize: function(options) {
+		var model = this.getModel();
+
+		model.bind(
+			'change:state',
+			this._onChangeState,
+			this
+		);
+
+		this.render();
+	},
+
+	_onChangeState: function() {
+		this.render();
+	},
+
+	_getPrettyNameForState: function(state) {
 		var _prettyNameMap = {};
 
 		_prettyNameMap[SearchWorker.STATE_FOUND]     = "Found";
@@ -11,55 +28,25 @@ module.exports = (function() {
 		_prettyNameMap[SearchWorker.STATE_WAITING]   = "Waiting";
 		_prettyNameMap[SearchWorker.STATE_NEEDLOGIN] = "Needs Login";
 
-		var _model = null;
+		return _prettyNameMap[state] || "Unknown State";
+	},
 
-		var _element = null;
+	render: function() {
+		var element = this.getElement();
+		element.innerHTML = '';
 
-		this.initialize = function(options) {
-			_model = options.model;
+		var state = this.getModel().get('state');
 
-			_element = document.createElement('div');
+		var stateText = this._getPrettyNameForState(state);
 
-			_model.bind(
-				'change:state',
-				this._onChangeState,
-				this
-			);
-		};
+		var stateElement = document.createElement('div');
 
-		this._onChangeState = function() {
-			this.render();
-		};
+		stateElement.title = stateText;
+		stateElement.classList.add('result');
+		stateElement.classList.add('result-' + state);
 
-		this.getModel = function() {
-			return _model;
-		};
+		element.appendChild(stateElement);
 
-		this.getElement = function() {
-			return _element;
-		};
-
-		this.render = function() {
-			var element = this.getElement();
-			element.innerHTML = '';
-
-			var state = this.getModel().get('state');
-
-			var stateText = _prettyNameMap[state] || "Unknown State";
-
-			var stateElement = document.createElement('div');
-
-			stateElement.title = stateText;
-			stateElement.classList.add('result');
-			stateElement.classList.add('result-' + state);
-
-			element.appendChild(stateElement);
-
-			return this;
-		};
-
-		this.initialize.apply(this, arguments);
-	};
-
-	return SearchWorkerIconView;
-})();
+		return this;
+	}
+});

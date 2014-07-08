@@ -1,52 +1,37 @@
-module.exports = (function() {
-	var SearchWorkerView = require('./SearchWorkerView');
+var View = require('app/View');
+var SearchWorkerView = require('app/views/SearchWorkerView');
 
-	var SearchManagerView = function(options) {
-		var _model = null;
+module.exports = View.extend({
+	initialize: function(options) {
 
-		var _element = null;
+	},
 
-		this.initialize = function(options) {
-			_model = options.model;
+	getTagName: function() {
+		return 'table';
+	},
 
-			_element = document.createElement('table');
+	render: function() {
+		var element = this.getElement();
 
-			_element.classList.add('table');
-			_element.classList.add('table-striped')
-		};
+		element.classList.add('table');
+		element.classList.add('table-striped')
 
-		this.getModel = function() {
-			return _model;
-		};
+		element.innerHTML = '';
 
-		this.getElement = function() {
-			return _element;
-		};
+		var tbody = document.createElement('tbody');
 
-		this.render = function() {
-			var element = this.getElement();
+		element.appendChild(tbody);
 
-			element.innerHTML = '';
+		if (this.getModel()) {
+			var workers = this.getModel().getWorkers();
 
-			var tbody = document.createElement('tbody');
-
-			element.appendChild(tbody);
-
-			if (this.getModel()) {
-				var workers = this.getModel().getWorkers();
-
-				for (var i = 0; i < workers.length; i++) {
-					tbody.appendChild(
-						new SearchWorkerView({ model: workers[i] }).render().getElement()
-					);
-				}
+			for (var i = 0; i < workers.length; i++) {
+				tbody.appendChild(
+					new SearchWorkerView({ model: workers[i] }).render().getElement()
+				);
 			}
+		}
 
-			return this;
-		};
-
-		this.initialize.call(this, options || {});
-	};
-
-	return SearchManagerView;
-})();
+		return this;
+	}
+});

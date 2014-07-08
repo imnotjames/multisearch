@@ -1,77 +1,60 @@
-module.exports = (function() {
-	var SearchWorkerIconView = require('./SearchWorkerIconView')
+var View = require('app/View');
 
-	var SearchWorkerView = function(options) {
-		var _model = null;
+var SearchWorkerIconView = require('app/views/SearchWorkerIconView')
 
-		var _element = null;
+module.exports = View.extend({
+	initialize: function(options) {
+		var model = this.getModel();
 
-		var _iconView = null;
+		model.bind(
+			'change:state',
+			this._onChangeState,
+			this
+		);
 
-		this.initialize = function(options) {
-			_model = options.model;
+		this._iconView = new SearchWorkerIconView({
+			model: model
+		});
+	},
 
-			_element = document.createElement('tr');
+	_onChangeState: function() {
+		this.render();
+	},
 
-			_iconView = new SearchWorkerIconView({
-				model: _model
-			});
+	getTagName: function() {
+		return 'tr';
+	},
 
-			_model.bind(
-				'change:state',
-				this._onChangeState,
-				this
-			);
-		};
+	render: function() {
+		var element = this.getElement();
 
-		this._onChangeState = function() {
-			this.render();
-		};
+		element.innerHTML = '';
 
-		this.getModel = function() {
-			return _model;
+		var iconContainerElement = document.createElement('td');
+		var labelContainerElement = document.createElement('td');
+
+		iconContainerElement.classList.add('text-center');
+		iconContainerElement.appendChild(this._iconView.getElement());
+
+		var labelText = '' + this.getModel().get('name') +' - ' + this.getModel().get('state');
+
+		var searchURL = this.getModel().getSearchURL();
+
+		if (searchURL) {
+			var anchorElement = document.createElement('a');
+
+			anchorElement.href = searchURL;
+
+			anchorElement.innerHTML = labelText;
+
+			labelContainerElement.appendChild(anchorElement);
+		} else {
+			labelContainerElement.innerHTML = labelText;
 		}
 
-		this.getElement = function() {
-			return _element;
-		};
+		element.appendChild(iconContainerElement);
+		element.appendChild(labelContainerElement);
 
-		this.render = function() {
-			var element = this.getElement();
-
-			element.innerHTML = '';
-
-			var iconContainerElement = document.createElement('td');
-			var labelContainerElement = document.createElement('td');
-
-			iconContainerElement.classList.add('text-center');
-			iconContainerElement.appendChild(_iconView.render().getElement());
-
-			var labelText = '' + this.getModel().get('name') +' - ' + this.getModel().get('state');
-
-			var searchURL = this.getModel().getSearchURL();
-
-			if (searchURL) {
-				var anchorElement = document.createElement('a');
-
-				anchorElement.href = searchURL;
-
-				anchorElement.innerHTML = labelText;
-
-				labelContainerElement.appendChild(anchorElement);
-			} else {
-				labelContainerElement.innerHTML = labelText;
-			}
-
-
-			element.appendChild(iconContainerElement);
-			element.appendChild(labelContainerElement);
-
-			return this;
-		};
-
-		this.initialize.apply(this, arguments);
-	};
-
-	return SearchWorkerView;
-})();
+		return this;
+	}
+});
